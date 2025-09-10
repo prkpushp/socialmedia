@@ -16,7 +16,7 @@ jobs:
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "author": "urn:li:fsd_profile:ACoAAAewlu4B9UDPJO4tgKaMPfpB5vXdHtKaTBE",
+              "author": "urn:li:person:lh3XwMSmya",
               "lifecycleState": "PUBLISHED",
               "specificContent": {
                 "com.linkedin.ugc.ShareContent": {
