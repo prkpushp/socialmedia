@@ -15,18 +15,18 @@ jobs:
           curl -X POST https://api.linkedin.com/v2/ugcPosts \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"author\": \"urn:li:organization:$PAGE_ID\",
-              \"lifecycleState\": \"PUBLISHED\",
-              \"specificContent\": {
-                \"com.linkedin.ugc.ShareContent\": {
-                  \"shareCommentary\": {
-                    \"text\": \"🚀 From SSH to Serverless: The DevOps Journey Nobody Tells You About\n\n✅ 90% invisible work\n✅ 5% firefighting\n✅ 5% pure magic\n\n💡 Lessons worth sharing!\"
+            -d '{
+              "author": "urn:li:fsd_profile:ACoAAAewlu4B9UDPJO4tgKaMPfpB5vXdHtKaTBE",
+              "lifecycleState": "PUBLISHED",
+              "specificContent": {
+                "com.linkedin.ugc.ShareContent": {
+                  "shareCommentary": {
+                    "text": "Hello LinkedIn! Posting via API."
                   },
-                  \"shareMediaCategory\": \"NONE\"
+                  "shareMediaCategory": "NONE"
                 }
               },
-              \"visibility\": {
-                \"com.linkedin.ugc.MemberNetworkVisibility\": \"PUBLIC\"
+              "visibility": {
+                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
               }
-            }"
+            }'
