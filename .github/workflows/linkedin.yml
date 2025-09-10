@@ -21,7 +21,7 @@ jobs:
               "specificContent": {
                 "com.linkedin.ugc.ShareContent": {
                   "shareCommentary": {
-                    "text": "Hello LinkedIn! Posting via API."
+                                        "text": "🚀 From SSH to Serverless: The DevOps Journey Nobody Tells You About\n\nWhen I started in cloud engineering, I thought the job was all about commands, configs, and containers.\nBut here’s the truth I’ve learned:\n\n✅ 90% of the job is invisible – keeping pipelines flowing, infra scaling, and teams shipping.\n✅ 5% is firefighting – when production goes 🔥 at 3 AM and you suddenly become the firefighter nobody trained.\n✅ 5% is pure magic – when your automation saves hours, a migration goes smoothly, or you watch infra scale in seconds with zero downtime.\n\nAnd in between all this, you realize:\n👉 It’s not about tools. It’s about building systems people can trust.\n👉 It’s not about “cloud hype.” It’s about removing friction so innovation feels natural.\n\nIf you’re in DevOps, Cloud, or SRE:\n\nDocument your journey.\n\nShare the lessons (even the messy ones).\n\nBecause behind every “deploy succeeded” is a story worth telling.\n\n💡 I’d love to hear:\nWhat’s the most unexpected lesson you’ve learned as an engineer in the cloud/DevOps world?\n\n#Cloud #DevOps #Engineering #Automation #Infra"
                   },
                   "shareMediaCategory": "NONE"
                 }
