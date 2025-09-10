@@ -1,0 +1,73 @@
+name: LinkedIn OAuth Token Retrieval Workflow
+
+on:
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  retrieve-token:
+    runs-on: ubuntu-latest
+
+    env:
+      CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+      REDIRECT_URI: 'https://wealthbridgezone.com/auth/linkedin/callback'
+      SCOPE: 'openid profile'  # Use scopes that worked (avoid w_member_social unless approved)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl jq  # jq for parsing JSON response
+
+      - name: Generate Authorization Code
+        run: |
+          # Note: This step simulates generating the auth code URL. In practice, this requires manual user authorization via browser.
+          # For automation, you might need to handle this differently (e.g., via a headless browser or stored refresh token if available).
+          # Here, we'll assume the auth code is provided as input or stored (but for security, manual input is recommended).
+          echo "Authorization URL: https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=$CLIENT_ID&redirect_uri=$REDIRECT_URI&scope=$SCOPE"
+          # Replace <AUTH_CODE> with the actual code obtained manually from the redirect URI.
+          # For CI, consider using GitHub Secrets or manual dispatch with inputs.
+          AUTH_CODE="${{ github.event.inputs.auth_code }}"  # Use workflow_dispatch input for auth_code
+          if [ -z "$AUTH_CODE" ]; then
+            echo "Error: AUTH_CODE not provided. Run manually with input."
+            exit 1
+          fi
+          echo "AUTH_CODE=$AUTH_CODE" >> $GITHUB_ENV
+
+      - name: Retrieve Access Token
+        run: |
+          RESPONSE=$(curl -v -X POST https://www.linkedin.com/oauth/v2/accessToken \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=authorization_code&code=${{ env.AUTH_CODE }}&redirect_uri=$REDIRECT_URI&client_id=$CLIENT_ID&client_secret=$CLIENT_SECRET")
+          echo "$RESPONSE"
+          # Parse and store access token (e.g., using jq)
+          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          if [ -z "$ACCESS_TOKEN" ]; then
+            echo "Error: Failed to retrieve access token."
+            exit 1
+          fi
+          echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
+
+      - name: Test API with Access Token
+        run: |
+          # Example: Fetch user profile using the access token
+          curl -X GET https://api.linkedin.com/v2/me \
+            -H "Authorization: Bearer ${{ env.ACCESS_TOKEN }}" \
+            -H "Accept: application/json"
+
+      - name: Store Token Securely (Optional)
+        run: |
+          # Example: Upload token as artifact or store in secrets (use caution for security)
+          echo "${{ env.ACCESS_TOKEN }}" > access_token.txt
+          echo "Token stored. In production, use GitHub Secrets or a vault."
+
+      - name: Upload Artifact (Optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: linkedin-token
+          path: access_token.txt
